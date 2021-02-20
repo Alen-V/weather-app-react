@@ -46,7 +46,7 @@ class App extends Component {
     this.state = {
       pages: ['statistics', 'cards', 'data', 'about'],
       numOfPages: 4,
-      pageActive: 3,
+      pageActive: 1,
       dataLoaded: false,
       cityData: {},
       data: [],

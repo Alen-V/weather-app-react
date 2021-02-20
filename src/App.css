@@ -1,38 +1,41 @@
-.App {
-  text-align: center;
+* {
+  transition: all linear 0.225s;
+  box-sizing: border-box;
+  user-select: none;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-size: 14px;
+  font-family: 'Spartan', sans-serif;
+  overflow: hidden;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+#root {
+  background-image: url(./assets/img/weather-img.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  letter-spacing: 1.3px;
+}
+
+.content {
+  height: inherit;
+}
+
+@media only screen and (max-width: 992px) {
+  .hourly-cards .hour-cards {
+      flex-wrap: nowrap;
+      align-items: center;
+      width: 65%;
+      overflow: auto;
   }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  .hourly-cards .hour-cards .left-side, .hourly-cards .hour-cards .right-side {
+      height: unset;
+      width: 100%;
   }
 }

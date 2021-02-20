@@ -1,0 +1,41 @@
+* {
+  transition: all linear 0.225s;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-size: 14px;
+  font-family: 'Spartan', sans-serif;
+  overflow: hidden;
+}
+
+#root {
+  background-image: url(./assets/img/weather-img.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  letter-spacing: 1.3px;
+}
+
+.content {
+  height: inherit;
+}
+
+@media only screen and (max-width: 992px) {
+  .hourly-cards .hour-cards {
+      flex-wrap: nowrap;
+      align-items: center;
+      width: 65%;
+      overflow: auto;
+  }
+
+  .hourly-cards .hour-cards .left-side, .hourly-cards .hour-cards .right-side {
+      height: unset;
+      width: 100%;
+  }
+}

@@ -3,10 +3,10 @@
     color: whitesmoke;
     font-weight: 600;
     padding: 0px 12px;
+    height: 70px;
 }
 
 .navbar > .navbar-container {
-    height: 70px;
     width: 100%;
     max-width: 1120px;
     display: flex;
@@ -14,6 +14,7 @@
     justify-content: space-between;
     margin: auto;
     padding: 0 10px;
+    height: 100%;
 }
 
 .navbar-container > .navbar-container-left {
@@ -67,4 +68,40 @@
 
 .navbar .search-container input:focus {
     width: 250px;
+}
+
+.search-container input {
+    transition: all ease .225s;
+}
+
+@media only screen and (max-width: 992px) {
+    .navbar {
+        height: unset;
+    }
+    .navbar-container > .navbar-container-left {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+    .navbar-container > .navbar-container-left .navbar-logo {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        height: 70px;
+    }
+    .navbar-container > .navbar-container-left .nav-dropdown-menu {
+        overflow: hidden;
+        transition: all ease .225s;
+        max-height: 0px;
+        text-align: center;
+    }
+
+    .navbar-container > .navbar-container-left .nav-dropdown-menu > div {
+        margin: 10px;
+    }
+
+    .navbar-container > .navbar-container-left .nav-dropdown-menu.expanded {
+        max-height: 200px;
+    }
 }

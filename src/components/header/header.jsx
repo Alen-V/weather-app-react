@@ -1,13 +1,18 @@
-import React from 'react'
+import { React, useState } from 'react'
 import "./header.css";
 
 const Header = (props) => {
-    const { pages, numOfPages, pageActive, listData, days } = props
-
+    const { pages, numOfPages, pageActive, listData, days, width } = props
+    const [dropdown, setDropdown] = useState(false)
     let setPage = (index) => {
       if(props.setPage) {
+        toggleDropdownMenu()
         props.setPage(index)
       }
+    }
+
+    const toggleDropdownMenu = () => {
+      setDropdown(!dropdown)
     }
 
     const getCityInfo = (event) => {
@@ -25,29 +30,37 @@ const Header = (props) => {
         {page}
       </div>
     ))
+    const searchContainer = (
+      <div className="search-container">
+        <form onKeyDown={(e) => {getCityInfo(e)}}>
+          <input type="search" placeholder="Search City"></input>
+        </form>
+      </div>
+  )
         
     const navbarContainerLeft = (
         <div className="navbar-container-left">
           <div className="navbar-logo">
-            <img src="/assets/img/Vector.svg" alt=""></img>
             <span>A-CODE Weather</span>
+            {width > 992 ? null : <div className={`dropdown-btn ${dropdown ? 'expanded' : ""}`} onClick={() => toggleDropdownMenu()}>
+              {<i class="fas fa-caret-down"></i>}
+            </div>}
           </div>
-            <div className="navbar-items">
-              {items}
-            </div>
+            {width > 992 ?
+              <div className="navbar-items">
+                {items}
+              </div> :
+              <div className={`nav-dropdown-menu ${dropdown ? 'expanded' : ""}`}>
+                {searchContainer}
+                {items}
+              </div>}
         </div>
     )
-    const searchContainer = (
-        <div className="search-container">
-          <form onKeyDown={(e) => {getCityInfo(e)}}>
-            <input type="search" placeholder="Search City"></input>
-          </form>
-        </div>
-    )
+    
     const navbarContainer = (
         <div className="navbar-container">
             {navbarContainerLeft}
-            {searchContainer}
+            {width > 992 ? searchContainer : null}
         </div>
     )
     return  <div className="navbar">

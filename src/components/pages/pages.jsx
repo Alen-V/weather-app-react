@@ -2,7 +2,22 @@ import React from 'react'
 import "./pages.css"
 
 const Pages = (props) => {
-    const { pages, pageActive, cityName, cityId, listData, days, dataUpdate, data, weatherDescription, currentTemp, measureUnit,sunrise, sunset } = props
+    const { pages,
+            pageActive,
+            cityName,
+            cityId,
+            listData,
+            days,
+            dataUpdate,
+            data,
+            weatherDescription,
+            currentTemp,
+            measureUnit,
+            sunrise,
+            sunset,
+            pageLoaded,
+            width
+        } = props
     let counter = 0;
     let pageInfo = null
     let dayImage;
@@ -45,16 +60,22 @@ const Pages = (props) => {
             >
                 <div className="weather-description">
                     <img src={dayImage} alt=""/>
-                    <span className="degrees">{Math.floor(data[index][0][0].temperature.currentTemp * 10) / 10}{measureUnit}</span>
-                    <span className="weather-condition">{data[index][0][0].weather[0].description}</span>
-                    <span>{date}</span>
+                    <div className={'weather-day-info'}>
+                        <span className="degrees">{Math.floor(data[index][0][0].temperature.currentTemp * 10) / 10}{measureUnit}</span>
+                        <span className="weather-condition">{data[index][0][0].weather[0].description}</span>
+                        <span>{date}</span>
+                    </div>
                 </div>
                 <div className={index === 0 ? 'weather-extra-info active-info' : 'weather-extra-info'}>
                     <span>{cityName}</span>
-                    <span><img src={windImage} alt=""/>{data[index][0][0].wind.windValue}{data[index][0][0].wind.measureUnit}</span>
-                    <span><img src={humidityImage} alt=""/>{data[index][0][0].humidity.humidityValue}{data[index][0][0].humidity.measureUnit}</span>
-                    {sunriseEl}
-                    {sunsetEl}
+                    <div className={'extra-info'}>
+                      <div><img src={windImage} alt=""/>{data[index][0][0].wind.windValue}{data[index][0][0].wind.measureUnit}</div>
+                      <div><img src={humidityImage} alt=""/>{data[index][0][0].humidity.humidityValue}{data[index][0][0].humidity.measureUnit}</div>
+                    </div>
+                    <div className={'extra-info'}>
+                        {sunriseEl}
+                        {sunsetEl}
+                    </div>
                 </div>
             </div>
         )
@@ -140,7 +161,7 @@ const Pages = (props) => {
                         {hourMainCard}
                     </div>
                     <div className="right-side">
-                        {minorCard(7)}
+                        {minorCard(6)}
                     </div>
                 </div>
             )
@@ -166,7 +187,13 @@ const Pages = (props) => {
             break;
     }
 
-
+    const loader = (
+        <div class="loader-container action-loading d-none" id="action-loading">
+            <div class="loading-container">
+                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
+    )
 
     const pageContainer = pages.map((pageName, index) => (
         <div className={(index + 1) === pageActive ? `pages ${pageName}-page active-page` : `pages ${pageName}-page`}>
@@ -174,7 +201,7 @@ const Pages = (props) => {
         </div>
     ))
     return  <div className="page-container">
-                {pageContainer}
+                {pageLoaded ? pageContainer : loader}
             </div>
 }
 

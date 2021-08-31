@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import $ from 'jquery'
+import $, { cssNumber } from 'jquery'
 import logo from './logo.svg';
 import './App.css';
 import Header from './components/header/header.jsx'
@@ -48,20 +48,34 @@ class App extends Component {
       numOfPages: 4,
       pageActive: 3,
       dataLoaded: false,
+      pageLoaded: false,
       cityData: {},
       data: [],
       listData: [],
       days: [],
       dataUpdate: [],
-      dates: []
+      dates: [],
+      width: window.innerWidth
     }
+    window.addEventListener('resize', () => {
+      this.setState({
+        width: window.innerWidth
+      })
+    })
   };
   setPage = (page) => {
     this.setState({
+      pageLoaded: false,
       pageActive: (page + 1)
     })
+    setTimeout(() => {
+      this.setState({
+        pageLoaded: true
+      })
+    }, 300);
   }
   componentDidMount = async () => {
+    // window.addEventListener('resize', () => this.setState({width: window.innerWidth}))
     try {
         await this.weatherDataCall('skopje')
         } catch(err) {
@@ -74,7 +88,6 @@ class App extends Component {
     let daysTime = this.printDates(5)
     let listData, days, data;
     currentTime = currentTime.toString().split(' ')[4]
-        try {
           this.setState({
             dataLoaded: false
           }, async () => {
@@ -82,30 +95,37 @@ class App extends Component {
             .then((dataX) => {
               listData = this.filterDays(dataX.list)
               days = this.eliminateDuplicates(listData)
-              console.log(days)
               data = this.filterData(listData, days)
               this.setState({
                 cityData: dataX.city,
-                dataLoaded: true,
                 listData: listData,
                 days: days,
                 data: data,
                 dataUpdate: currentTime,
-                dates: daysTime
+                dates: daysTime,
+                pageLoaded: true
               })
+              setTimeout(() => {
+                this.setState({
+                  dataLoaded: true
+                })
+              }, 100);
+          }).catch(err => {
+            alert("Please input a valid city!")
+            setTimeout(() => {
+              this.setState({
+                dataLoaded: true
+              })
+            }, 100);
           })
-          })
-        } catch (err) {
-          
-        }
-  }
+        })
+    }
   
   fetchData = async (city) => {
     let oldWeatherApi = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=814e138461b0f6b9423de687beb9ff3e`
     let newWeatherApi = `http://api.weatherapi.com/v1/forecast.json?key=e9ff8cb3a35840cfa1d103610211702&q&q=${city}&days=10`
     let call = await fetch(oldWeatherApi)
     let data = await call.json()
-    console.log(data)
     return data
   }
 
@@ -158,12 +178,10 @@ class App extends Component {
   }
 
   filterData(listData, filterDate) {
-    console.log(filterDate)
     let filterStats = []
     let averageStats = []
     for (let i = 0; i < 5; i++) {
       listData.map((data) => {
-        console.log(data)
           if(data.weather.date === filterDate[i]) {
               if(filterStats.length === i + 1) {
                 filterStats[i].push([data.weather])
@@ -173,7 +191,6 @@ class App extends Component {
           }
       })
       if(i === 4) {
-        console.log(filterStats)
           this.dailyStats(filterStats[1], averageStats, 'temperature','currentTemp')
           this.dailyStats(filterStats[1], averageStats, 'humidity','humidityValue')
           this.dailyStats(filterStats[1], averageStats, 'wind','windValue')
@@ -203,19 +220,24 @@ render() {
     numOfPages,
     pageActive,
     dataLoaded,
+    pageLoaded,
     cityData,
     data,
     listData,
     days,
     dataUpdate,
     dates,
+    width
   } = this.state;
-  if(!dataLoaded) {
-    return (
-      <div>
-        <span>Loading</span>
+  const loader = (
+    <div class="loader-container action-loading d-none" id="action-loading">
+      <div class="loading-container">
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
       </div>
-    )
+    </div>
+  )
+  if(!dataLoaded) {
+    return ( loader )
   } else {
     const content = (
       <div className="content">
@@ -225,6 +247,7 @@ render() {
           pageActive={pageActive}
           listData={listData}
           days={days}
+          width={width}
           setPage={this.setPage}
           dataCall={this.weatherDataCall}
         />
@@ -244,6 +267,8 @@ render() {
           days={days}
           dataUpdate={dataUpdate}
           dates={dates}
+          pageLoaded={pageLoaded}
+          width={width}
         />
       </div>
   )
